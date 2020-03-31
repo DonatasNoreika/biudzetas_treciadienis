@@ -255,6 +255,17 @@ def reset_token(token):
         return redirect(url_for('prisijungti'))
     return render_template('reset_token.html', title='Reset Password', form=form)
 
+@app.errorhandler(404)
+def klaida_404(klaida):
+    return render_template("404.html"), 404
+
+@app.errorhandler(403)
+def klaida_403(klaida):
+    return render_template("403.html"), 403
+
+@app.errorhandler(500)
+def klaida_500(klaida):
+    return render_template("500.html"), 500
 
 @app.route("/")
 def index():
