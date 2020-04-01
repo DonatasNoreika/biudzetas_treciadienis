@@ -225,8 +225,9 @@ def send_reset_email(user):
     {url_for('reset_token', token=token, _external=True)}
     Jei jūs nedarėte šios užklausos, nieko nearykite ir slaptažodis nebus pakeistas.
     '''
-    mail.send(msg)
     print(msg.body)
+    mail.send(msg)
+
 
 @app.route("/reset_password", methods=['GET', 'POST'])
 def reset_request():
