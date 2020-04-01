@@ -11,6 +11,7 @@ import secrets
 from PIL import Image
 from flask_mail import Message, Mail
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from email_settings import *
 import forms
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -26,11 +27,11 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'registruotis'
 login_manager.login_message_category = 'info'
 
-app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = ""
-app.config['MAIL_PASSWORD'] = ""
+app.config['MAIL_USERNAME'] = MAIL_USERNAME
+app.config['MAIL_PASSWORD'] = MAIL_PASSWORD
 
 class Vartotojas(db.Model, UserMixin):
     __tablename__ = "vartotojas"
@@ -218,13 +219,14 @@ def paskyra():
 def send_reset_email(user):
     token = user.get_reset_token()
     msg = Message('Slaptažodžio atnaujinimo užklausa',
-                  sender='noreply@demo.com',
+                  sender='pythonkursascodeacademy@gmail.com',
                   recipients=[user.el_pastas])
     msg.body = f'''Norėdami atnaujinti slaptažodį, paspauskite nuorodą:
     {url_for('reset_token', token=token, _external=True)}
     Jei jūs nedarėte šios užklausos, nieko nearykite ir slaptažodis nebus pakeistas.
     '''
     mail.send(msg)
+    print(msg.body)
 
 @app.route("/reset_password", methods=['GET', 'POST'])
 def reset_request():
@@ -248,7 +250,7 @@ def reset_token(token):
         return redirect(url_for('reset_request'))
     form = forms.SlaptazodzioAtnaujinimoForma()
     if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        hashed_password = bcrypt.generate_password_hash(form.slaptazodis.data).decode('utf-8')
         user.slaptazodis = hashed_password
         db.session.commit()
         flash('Tavo slaptažodis buvo atnaujintas! Gali prisijungti', 'success')
@@ -272,5 +274,6 @@ def index():
     return render_template("index.html")
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8000, debug=True)
+    app.run(debug=True)
+    # app.run(host='127.0.0.1', port=8000, debug=True)
     db.create_all()
