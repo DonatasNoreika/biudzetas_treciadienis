@@ -72,7 +72,7 @@ class ManoModelView(ModelView):
 
 admin = Admin(app)
 admin.add_view(ManoModelView(Vartotojas, db.session))
-admin.add_view(ModelView(Irasas, db.session))
+admin.add_view(ManoModelView(Irasas, db.session))
 
 @login_manager.user_loader
 def load_user(vartotojo_id):
@@ -226,7 +226,7 @@ def send_reset_email(user):
     Jei jūs nedarėte šios užklausos, nieko nedarykite ir slaptažodis nebus pakeistas.
     '''
     print(msg.body)
-    mail.send(msg)
+    # mail.send(msg)
 
 
 @app.route("/reset_password", methods=['GET', 'POST'])
