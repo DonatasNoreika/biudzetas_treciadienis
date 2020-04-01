@@ -223,7 +223,7 @@ def send_reset_email(user):
                   recipients=[user.el_pastas])
     msg.body = f'''Norėdami atnaujinti slaptažodį, paspauskite nuorodą:
     {url_for('reset_token', token=token, _external=True)}
-    Jei jūs nedarėte šios užklausos, nieko nearykite ir slaptažodis nebus pakeistas.
+    Jei jūs nedarėte šios užklausos, nieko nedarykite ir slaptažodis nebus pakeistas.
     '''
     print(msg.body)
     mail.send(msg)
